@@ -1,0 +1,290 @@
+$dark: #3a3837;
+$gray: #ccc;
+$gray-light: #ececec;
+$red: #CC6571;
+$green: #6CB359;
+
+$color-1: #32655d;
+$blockstack-color: #361D44;
+$msg-bubble-color: lighten($gray-light, 2%);
+
+body {
+  color: $dark;
+}
+
+.App {
+	background-color: $gray-light;
+	height: 100vh;
+}
+
+.SignIn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  text-align: center;
+  color: lighten($gray-light, 5%);
+  background-color: $color-1;
+
+  > div {
+    display: inline-block;
+  }
+
+  h1 {
+    text-transform: uppercase;
+  }
+
+  .button {
+    color: lighten($gray-light, 5%);
+    background-color: $blockstack-color;
+
+    &:hover, &:active {
+      color: lighten($gray-light, 5%);
+      background-color: darken($blockstack-color, 5%);
+    }
+  }
+}
+
+.TribeChat {
+  display: flex;
+  flex-direction: column;
+	width: 100%;
+	height: 100%;
+	max-width: 1400px;
+	background-color: #fff;
+	margin-left: 0!important;
+}
+
+.HeaderBar {
+  z-index: 1;
+  background-color: $dark;
+  box-shadow: rgba($dark, 0.1) 0px 3px 1px;
+  color: lighten($gray-light, 5%);
+
+  > .ui.grid > .column {
+    &:first-child {
+      border-right: 2px solid lighten($dark, 10%);
+    }
+  }
+
+  .UserTopBar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .UserTopBar > .UserItem,
+  .ConversationTopBar > .UserItem {
+    padding: 0 0 0 10px;
+  }
+
+  .UserItem.-connection::after{
+    bottom: 0;
+    left: 15px;
+  }
+}
+
+.MainWindow {
+  flex: 1;
+
+  > .ui.grid {
+    height: 100%;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  > .ui.grid > .column {
+    &:first-child {
+      background-color: $color-1;
+      border-right: 2px solid darken($color-1, 10%);
+    }
+
+    &:last-child {
+      border-right: 1px solid $gray;
+    }
+  }
+}
+
+.ConversationsBar {
+  color: lighten($gray-light, 5%);
+  text-align: center;
+  height: 100%;
+
+  > div {
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 70px);
+  }
+
+  > div > ul {
+    flex-grow: 1;
+    height: 1px;
+    padding: 0;
+    list-style: none;
+    height: calc(100vh - 210px);
+    margin-right: -1rem;
+    // hide scrollbar
+    overflow-y: scroll;
+    direction: rtl;
+    margin-left: -3rem;
+    padding-left: 2rem;
+  }
+
+  > div > ul > li {
+    direction: ltr;
+    margin-right: 1rem;
+    
+    &.selected {
+      color: $dark;
+      background-color: lighten($color-1, 30%);
+      border-radius: 10px 0 0 10px;
+      margin-right: -1rem;
+    }
+  }
+}
+
+.ConnectionModal {
+  word-wrap: break-word;
+
+  .my-identifier {
+    margin-bottom: 10px;
+  }
+}
+
+.UserItem {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 15px;
+
+  > .image {
+    width: 54px;
+    background-color: #fff;
+    box-shadow: 0px 0px 3px 3px rgba($gray, 0.8);
+  }
+
+  > strong {
+    margin-left: 10px;
+    font-size: 16px;
+    font-weight: bold;
+  }
+}
+
+.UserItem.-connection {
+  &::after {
+    content: '';
+    display: block;
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    bottom: 15px;
+    left: 18px;
+    border-radius: 10px;
+  }
+
+  &.-connected::after {
+    background-color: $green;
+  }
+
+  &.-disconnected::after {
+    background-color: $red;
+  }
+}
+
+.ChatWindow {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.ChatDisplay {
+  flex-grow: 1;
+  height: calc(100vh - 230px);
+  overflow-y: auto;
+  margin-bottom: 1rem;
+
+  &.-align-bottom > div {
+    height: 100%;
+    justify-content: flex-end;
+  }
+
+  > div {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ChatMessage {
+    display: flex;
+    align-items: flex-start;
+    max-width: 47%;
+    padding: 10px;
+
+    &.-right {
+      align-self: flex-end;
+    }
+
+    > .image {
+      width: 54px;
+      background-color: #fff;
+      box-shadow: 0px 0px 3px 3px rgba($gray, 0.8);
+    }
+
+    > .msg-bubble {
+      position: relative;
+      width: fit-content;
+      background: $msg-bubble-color;
+      border-radius: 10px;
+      padding: 15px;
+      margin: 0 15px;
+
+      > * {
+        display: block;
+      }
+
+      &::after {
+        content: '';
+        position: absolute;
+        top: 20px;
+        width: 0;
+        height: 0;
+        border: 20px solid transparent;
+        border-top: 0;
+        margin-top: -20px;
+      }
+    }
+
+    &.-left > .msg-bubble::after {
+      left: 0;
+      border-right-color: $msg-bubble-color;
+      border-left: 0;
+      margin-left: -12px;
+    }
+
+    &.-right > .msg-bubble::after {
+      right: 0;
+      border-left-color: $msg-bubble-color;
+      border-right: 0;
+      margin-right: -12px;
+    }
+  }
+}
+
+.ChatInput {
+  position: relative;
+
+  .form textarea {
+    padding-right: 60px;
+  }
+
+  .chat-addons {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+
+    .icon.button {
+      display: block;
+      padding: 5px;
+      box-shadow: none;
+    }
+  }
+}
