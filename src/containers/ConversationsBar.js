@@ -6,6 +6,7 @@ import UserItem from '../components/UserItem';
 
 import { addFriend } from '../actions/friendActions';
 import { addConnection } from '../actions/connectionActions';
+import { displayConversation } from '../actions/conversationActions';
 
 class ConversationsBar extends Component {
   constructor(props) {
@@ -14,6 +15,7 @@ class ConversationsBar extends Component {
     this.openModal = this.openModal.bind(this);
     this.handleModalCancel = this.handleModalCancel.bind(this);
     this.handleModalAdd = this.handleModalAdd.bind(this);
+    this.handleConversationClick = this.handleConversationClick.bind(this);
   }
 
   openModal() {
@@ -30,6 +32,13 @@ class ConversationsBar extends Component {
     this.props.onMakeConnection(address);
   }
 
+  handleConversationClick(e) {
+    const address = e.currentTarget.dataset.address;
+    if (address === this.props.displayConversation) return;
+    this.props.rxDisplayConversation(address);
+    console.log(e.currentTarget.dataset.address);
+  }
+
   render() {
     return (
       <div className="ConversationsBar">
@@ -39,8 +48,8 @@ class ConversationsBar extends Component {
         <div>
           <ul>
             {this.props.connections.map((connection, key) =>
-              <li className={connection.connected ? 'selected' : ''} key={key}>
-                <UserItem user={connection} connected={connection.connected ? true : false} key={key} />
+              <li key={key} className={connection.selected ? 'selected' : ''} data-address={connection.address} onClick={this.handleConversationClick}>
+                <UserItem user={connection} connected={connection.connected ? true : false} />
               </li>
             )}
           </ul>
@@ -53,9 +62,12 @@ class ConversationsBar extends Component {
 function mapStateToProps(state) {
   return {
     address: state.user.address,
+    displayConversation: state.displayConversation,
     connections: state.friends.map(friend => {
       const connection = state.connections.find(c => c.address === friend.address);
-      return { ...friend, connected: connection.connected };
+      const item = { ...friend, connected: connection.connected };
+      if (friend.address === state.displayConversation) item.selected = true;
+      return item;
     })
   };
 }
@@ -65,6 +77,9 @@ function mapDispatchToProps(dispatch) {
     rxAddConnection: (address) => {
       dispatch(addFriend({ address }));
       dispatch(addConnection({ address }));
+    },
+    rxDisplayConversation: (address) => {
+      return dispatch(displayConversation(address));
     }
   };
 }

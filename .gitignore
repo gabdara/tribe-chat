@@ -21,3 +21,4 @@ yarn-error.log*
 # App
 /nbproject/
 *.css
+*.css.map
