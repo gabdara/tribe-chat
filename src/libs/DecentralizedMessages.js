@@ -41,16 +41,7 @@ export default DecentralizedMessages;
 class _DecentralizedMessages {
   constructor(self) {
     this.self = self;
-    this.readBlock().then(async (block) => {
-      if (!block) this.block = await this.createNewCurrentBlock();
-      else this.block = block;
-      console.log('DecentralizedMessages ready', this.guestAddress);
-      this.self.emit('ready');
-    });
-
-    
-    // fs.writeData(this.getMessagePath(0, 0), '');
-    // fs.writeData(this.getMessagePath(0, 1), '');
+    this.initBlock();
   }
 
   get guestAddress() {
@@ -65,6 +56,14 @@ class _DecentralizedMessages {
     return this.guestAddress + MESSAGES_FOLDER;
   }
 
+  async initBlock() {
+    this.block = await this.readBlock();
+    if (!this.block) this.block = await this.createNewCurrentBlock();
+    if (!this.block) throw new Error('DecentralizedMessages: could not set initial block');
+    console.log('DecentralizedMessages is ready', this.guestAddress);
+    this.self.emit('ready');
+  }
+
   getMessagePath(blockIndex, msgIndex) {
     return this.messagesPath + BLOCK_FILENAME + '-' + blockIndex + '/' + msgIndex + '.json';
   }
@@ -74,7 +73,7 @@ class _DecentralizedMessages {
   }
 
   createNewCurrentBlock(index = 0) {
-    new Promise(async (resolve) => {
+    return new Promise(async (resolve) => {
       const block = { index, messages: [] };
       await this.writeBlock(block, true);
       resolve(block);

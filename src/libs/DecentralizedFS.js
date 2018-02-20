@@ -85,10 +85,10 @@ class _DecentralizedFS {
 
   init() {
     if (isUserSignedIn()) {
-      if (localStorage.getItem('connectToHub')) {
+      if (window.connectingToHub) {
         // connection already in progress
         const ci = setInterval(() => {
-          if (!localStorage.getItem('connectToHub')) {
+          if (!window.connectingToHub) {
             clearInterval(ci);
             this.makeHubConnection();
           }
@@ -155,10 +155,10 @@ function setLocalGaiaHubConnection() {
     localStorage.setItem(BLOCKSTACK_STORAGE_LABEL, JSON.stringify(userData));
   }
 
-  localStorage.setItem('connectToHub', true);
+  window.connectingToHub = true;
   return connectToGaiaHub(userData.hubUrl, userData.appPrivateKey).then((gaiaConfig) => {
     localStorage.setItem(BLOCKSTACK_GAIA_HUB_LABEL, JSON.stringify(gaiaConfig));
-    localStorage.removeItem('connectToHub');
+    window.connectingToHub = false;
     return gaiaConfig;
   });
 }

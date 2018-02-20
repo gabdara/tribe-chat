@@ -133,6 +133,8 @@ body {
   > div > ul > li {
     direction: ltr;
     margin-right: 1rem;
+    margin-bottom: 10px;
+    cursor: pointer;
     
     &.selected {
       color: $dark;
