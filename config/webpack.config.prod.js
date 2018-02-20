@@ -274,6 +274,8 @@ module.exports = {
       },
       mangle: {
         safari10: true,
+        keep_fnames: true,
+        reserved: ['BigInteger','ECPair','Point']
       },
       output: {
         comments: false,
