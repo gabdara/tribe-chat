@@ -24,6 +24,7 @@ git clone https://github.com/gabdara/tribe-chat.git
 npm install
 npm start
 ```
+If the Blockstack Sign in hangs on getting details please use an "Allow CORS" browser addon.
 
 ## Usage considerations
 
